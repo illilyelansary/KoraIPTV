@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Check, Play, Shield, Zap, Globe, Star, Users, TrendingUp, Wifi, Monitor, Smartphone, Tv } from 'lucide-react'
+import { Check, Play, Shield, Zap, Globe, Star, Users, TrendingUp, Wifi, Monitor } from 'lucide-react'
 import './App.css'
 
 // Import des images
@@ -11,7 +11,26 @@ import africaImage from './assets/L1MOrEHkde5p.jpg'
 import streamingImage from './assets/9zDuNPqcOsC6.png'
 
 function App() {
-  const [selectedPlan, setSelectedPlan] = useState('premium')
+  const [selectedPlan, setSelectedPlan] = useState('yearly')
+
+  // Helper pour créer le lien mailto avec objet + message préremplis
+  const buildMailto = useCallback((plan) => {
+    const to = 'support@koraiptv.com'
+    const subject = encodeURIComponent(`Achat abonnement ${plan.name} – ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA`)
+    const body = encodeURIComponent(
+      `Bonjour,\n\nJe souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}).\n\nMerci de m'indiquer la marche à suivre pour finaliser l'achat.\n\nCordialement,`
+    )
+    return `mailto:${to}?subject=${subject}&body=${body}`
+  }, [])
+
+  // Navigation avec défilement fluide vers les sections
+  const handleNavClick = useCallback((e, targetId) => {
+    e.preventDefault()
+    const el = document.getElementById(targetId)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [])
 
   const plans = [
     {
@@ -42,7 +61,7 @@ function App() {
         'VOD & séries illimitées',
         'Chaînes africaines exclusives'
       ],
-      popular: true
+      popular: false
     },
     {
       id: 'ultimate',
@@ -58,7 +77,26 @@ function App() {
         'Contenu premium exclusif',
         'Chaînes africaines & internationales',
         'Enregistrement cloud'
-      ]
+      ],
+      popular: false
+    },
+    // ✅ Nouvelle formule 1 an (la plus populaire)
+    {
+      id: 'yearly',
+      name: 'Annuel',
+      priceEUR: '59.99',
+      priceFCFA: '39,000',
+      duration: '12 mois',
+      features: [
+        'Accès complet 4K/HD pendant 12 mois',
+        'Serveurs anti-freeze ultra',
+        'Support prioritaire 24/7',
+        '10 connexions simultanées',
+        'VOD & séries illimitées',
+        'Chaînes africaines & internationales',
+        'Mises à jour & priorités exclusives'
+      ],
+      popular: true
     }
   ]
 
@@ -104,12 +142,12 @@ function App() {
             <span className="text-2xl font-bold text-white">KORAIPTV</span>
           </div>
           <nav className="hidden md:flex space-x-8">
-            <a href="#accueil" className="text-white hover:text-purple-300 transition-colors">Accueil</a>
-            <a href="#services" className="text-white hover:text-purple-300 transition-colors">Services</a>
-            <a href="#tarifs" className="text-white hover:text-purple-300 transition-colors">Tarifs</a>
-            <a href="#contact" className="text-white hover:text-purple-300 transition-colors">Contact</a>
+            <a href="#accueil" onClick={(e)=>handleNavClick(e,'accueil')} className="text-white hover:text-purple-300 transition-colors">Accueil</a>
+            <a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="text-white hover:text-purple-300 transition-colors">Services</a>
+            <a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="text-white hover:text-purple-300 transition-colors">Tarifs</a>
+            <a href="#contact" onClick={(e)=>handleNavClick(e,'contact')} className="text-white hover:text-purple-300 transition-colors">Contact</a>
           </nav>
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600" onClick={(e)=>handleNavClick(e,'tarifs')}>
             S'abonner
           </Button>
         </div>
@@ -124,32 +162,26 @@ function App() {
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
               L'IPTV Premium
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                {" "}pour l'Afrique
-              </span>
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{' '}pour l'Afrique</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Découvrez la révolution du streaming avec KORAIPTV. Plus de 25,000 chaînes en 4K/HD, 
               serveurs anti-freeze ultra-performants et contenu africain exclusif.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-lg px-8 py-4">
+              <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'tarifs')}>
                 Commencer maintenant
               </Button>
-              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-4">
+              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'services')}>
                 Voir la démo
               </Button>
             </div>
           </div>
-          
+
           {/* Hero Image */}
           <div className="relative max-w-4xl mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-3xl"></div>
-            <img 
-              src={heroImage} 
-              alt="IPTV Streaming Interface" 
-              className="relative rounded-2xl shadow-2xl w-full"
-            />
+            <img src={heroImage} alt="IPTV Streaming Interface" className="relative rounded-2xl shadow-2xl w-full" />
           </div>
         </div>
       </section>
@@ -174,37 +206,17 @@ function App() {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-6 bg-green-500/20 text-green-300 border-green-500/30">
-                📈 Croissance Explosive
-              </Badge>
-              <h2 className="text-4xl font-bold text-white mb-6">
-                L'IPTV : La Révolution du Divertissement en Afrique
-              </h2>
-              <p className="text-gray-300 mb-6 text-lg">
-                Le marché mondial de l'IPTV connaît une croissance exceptionnelle, passant de 79,86 milliards USD en 2024 
-                à 276,38 milliards USD d'ici 2032, soit un taux de croissance de 16,8% par an.
-              </p>
+              <Badge className="mb-6 bg-green-500/20 text-green-300 border-green-500/30">📈 Croissance Explosive</Badge>
+              <h2 className="text-4xl font-bold text-white mb-6">L'IPTV : La Révolution du Divertissement en Afrique</h2>
+              <p className="text-gray-300 mb-6 text-lg">Le marché mondial de l'IPTV connaît une croissance exceptionnelle, passant de 79,86 milliards USD en 2024 à 276,38 milliards USD d'ici 2032, soit un taux de croissance de 16,8% par an.</p>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <TrendingUp className="w-6 h-6 text-green-400" />
-                  <span className="text-white">Croissance de 18,99% du marché IPTV</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Globe className="w-6 h-6 text-blue-400" />
-                  <span className="text-white">Expansion rapide en Afrique subsaharienne</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Users className="w-6 h-6 text-purple-400" />
-                  <span className="text-white">Demande croissante pour le contenu de qualité</span>
-                </div>
+                <div className="flex items-center space-x-3"><TrendingUp className="w-6 h-6 text-green-400" /><span className="text-white">Croissance de 18,99% du marché IPTV</span></div>
+                <div className="flex items-center space-x-3"><Globe className="w-6 h-6 text-blue-400" /><span className="text-white">Expansion rapide en Afrique subsaharienne</span></div>
+                <div className="flex items-center space-x-3"><Users className="w-6 h-6 text-purple-400" /><span className="text-white">Demande croissante pour le contenu de qualité</span></div>
               </div>
             </div>
             <div className="relative">
-              <img 
-                src={africaImage} 
-                alt="Télévision numérique en Afrique" 
-                className="rounded-2xl shadow-2xl w-full"
-              />
+              <img src={africaImage} alt="Télévision numérique en Afrique" className="rounded-2xl shadow-2xl w-full" />
             </div>
           </div>
         </div>
@@ -214,18 +226,10 @@ function App() {
       <section id="services" className="py-20 px-4 bg-black/20">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-6 bg-blue-500/20 text-blue-300 border-blue-500/30">
-              🛡️ Technologie Avancée
-            </Badge>
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Pourquoi Choisir KORAIPTV ?
-            </h2>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-              Notre infrastructure de pointe garantit une expérience de streaming exceptionnelle, 
-              spécialement optimisée pour le marché africain.
-            </p>
+            <Badge className="mb-6 bg-blue-500/20 text-blue-300 border-blue-500/30">🛡️ Technologie Avancée</Badge>
+            <h2 className="text-4xl font-bold text-white mb-6">Pourquoi Choisir KORAIPTV ?</h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">Notre infrastructure de pointe garantit une expérience de streaming exceptionnelle, spécialement optimisée pour le marché africain.</p>
           </div>
-          
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300">
@@ -234,9 +238,7 @@ function App() {
                   <CardTitle className="text-white">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-gray-300 text-center">
-                    {feature.description}
-                  </CardDescription>
+                  <CardDescription className="text-gray-300 text-center">{feature.description}</CardDescription>
                 </CardContent>
               </Card>
             ))}
@@ -249,36 +251,16 @@ function App() {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative">
-              <img 
-                src={streamingImage} 
-                alt="Serveurs IPTV Anti-Freeze" 
-                className="rounded-2xl shadow-2xl w-full"
-              />
+              <img src={streamingImage} alt="Serveurs IPTV Anti-Freeze" className="rounded-2xl shadow-2xl w-full" />
             </div>
             <div>
-              <Badge className="mb-6 bg-red-500/20 text-red-300 border-red-500/30">
-                🔥 Technologie Anti-Freeze
-              </Badge>
-              <h2 className="text-4xl font-bold text-white mb-6">
-                Serveurs Ultra-Performants
-              </h2>
-              <p className="text-gray-300 mb-6 text-lg">
-                Nos serveurs anti-freeze utilisent une technologie de pointe pour éliminer les interruptions 
-                de diffusion. Fini le buffering et les coupures, profitez d'un streaming fluide 24h/24.
-              </p>
+              <Badge className="mb-6 bg-red-500/20 text-red-300 border-red-500/30">🔥 Technologie Anti-Freeze</Badge>
+              <h2 className="text-4xl font-bold text-white mb-6">Serveurs Ultra-Performants</h2>
+              <p className="text-gray-300 mb-6 text-lg">Nos serveurs anti-freeze utilisent une technologie de pointe pour éliminer les interruptions de diffusion. Fini le buffering et les coupures, profitez d'un streaming fluide 24h/24.</p>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <Shield className="w-6 h-6 text-green-400" />
-                  <span className="text-white">Infrastructure serveur robuste et redondante</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Wifi className="w-6 h-6 text-blue-400" />
-                  <span className="text-white">Bande passante optimisée pour l'Afrique</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Zap className="w-6 h-6 text-yellow-400" />
-                  <span className="text-white">CDN global pour une latence minimale</span>
-                </div>
+                <div className="flex items-center space-x-3"><Shield className="w-6 h-6 text-green-400" /><span className="text-white">Infrastructure serveur robuste et redondante</span></div>
+                <div className="flex items-center space-x-3"><Wifi className="w-6 h-6 text-blue-400" /><span className="text-white">Bande passante optimisée pour l'Afrique</span></div>
+                <div className="flex items-center space-x-3"><Zap className="w-6 h-6 text-yellow-400" /><span className="text-white">CDN global pour une latence minimale</span></div>
               </div>
             </div>
           </div>
@@ -289,37 +271,26 @@ function App() {
       <section id="tarifs" className="py-20 px-4 bg-black/20">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-6 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
-              💰 Tarifs Compétitifs
-            </Badge>
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Choisissez Votre Abonnement
-            </h2>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-              Des prix adaptés au marché africain avec paiement en FCFA et EUR. 
-              Tous nos plans incluent nos serveurs anti-freeze premium.
-            </p>
+            <Badge className="mb-6 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">💰 Tarifs Compétitifs</Badge>
+            <h2 className="text-4xl font-bold text-white mb-6">Choisissez Votre Abonnement</h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">Des prix adaptés au marché africain avec paiement en FCFA et EUR. Tous nos plans incluent nos serveurs anti-freeze premium.</p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+          <div className="grid md:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {plans.map((plan) => (
-              <Card 
-                key={plan.id} 
+              <Card
+                key={plan.id}
                 className={`relative bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 ${
                   plan.popular ? 'ring-2 ring-purple-500 scale-105' : ''
                 }`}
               >
                 {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500">
-                    Plus Populaire
-                  </Badge>
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500">Plus Populaire</Badge>
                 )}
                 <CardHeader className="text-center">
                   <CardTitle className="text-white text-2xl">{plan.name}</CardTitle>
                   <div className="mt-4">
-                    <div className="text-3xl font-bold text-white">
-                      {plan.priceEUR}€ / {plan.priceFCFA} FCFA
-                    </div>
+                    <div className="text-3xl font-bold text-white">{plan.priceEUR}€ / {plan.priceFCFA} FCFA</div>
                     <div className="text-gray-400">{plan.duration}</div>
                   </div>
                 </CardHeader>
@@ -332,13 +303,16 @@ function App() {
                       </li>
                     ))}
                   </ul>
-                  <Button 
+                  <Button
                     className={`w-full ${
-                      plan.popular 
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600' 
+                      plan.popular
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
                         : 'bg-white/10 hover:bg-white/20 text-white'
                     }`}
-                    onClick={() => setSelectedPlan(plan.id)}
+                    onClick={() => {
+                      setSelectedPlan(plan.id)
+                      window.location.href = buildMailto(plan)
+                    }}
                   >
                     Choisir ce plan
                   </Button>
@@ -352,18 +326,10 @@ function App() {
       {/* Strategic Positioning Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto text-center">
-          <Badge className="mb-6 bg-orange-500/20 text-orange-300 border-orange-500/30">
-            🌍 Positionnement Stratégique
-          </Badge>
-          <h2 className="text-4xl font-bold text-white mb-6">
-            KORAIPTV : Votre Partenaire de Confiance en Afrique
-          </h2>
-          <p className="text-gray-300 text-lg max-w-4xl mx-auto mb-12">
-            Contrairement à la tendance mondiale, le marché africain de la télévision payante continue sa croissance. 
-            KORAIPTV se positionne comme le leader de cette révolution numérique, offrant un service premium 
-            adapté aux besoins spécifiques du continent africain.
-          </p>
-          
+          <Badge className="mb-6 bg-orange-500/20 text-orange-300 border-orange-500/30">🌍 Positionnement Stratégique</Badge>
+          <h2 className="text-4xl font-bold text-white mb-6">KORAIPTV : Votre Partenaire de Confiance en Afrique</h2>
+          <p className="text-gray-300 text-lg max-w-4xl mx-auto mb-12">Contrairement à la tendance mondiale, le marché africain de la télévision payante continue sa croissance. KORAIPTV se positionne comme le leader de cette révolution numérique, offrant un service premium adapté aux besoins spécifiques du continent africain.</p>
+
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -393,18 +359,13 @@ function App() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-purple-600 to-pink-600">
         <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            Rejoignez la Révolution IPTV
-          </h2>
-          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-            Plus de 500,000 clients nous font déjà confiance. 
-            Découvrez pourquoi KORAIPTV est le choix n°1 en Afrique.
-          </p>
+          <h2 className="text-4xl font-bold text-white mb-6">Rejoignez la Révolution IPTV</h2>
+          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">Plus de 500,000 clients nous font déjà confiance. Découvrez pourquoi KORAIPTV est le choix n°1 en Afrique.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4">
+            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'tarifs')}>
               Commencer l'essai gratuit
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'contact')}>
               Contacter un expert
             </Button>
           </div>
@@ -422,35 +383,38 @@ function App() {
                 </div>
                 <span className="text-2xl font-bold text-white">KORAIPTV</span>
               </div>
-              <p className="text-gray-400 mb-4">
-                Le service IPTV premium de référence en Afrique. 
-                Streaming de qualité, serveurs anti-freeze et support 24/7.
-              </p>
+              <p className="text-gray-400 mb-4">Le service IPTV premium de référence en Afrique. Streaming de qualité, serveurs anti-freeze et support 24/7.</p>
             </div>
             <div>
               <h3 className="text-white font-bold mb-4">Services</h3>
               <ul className="space-y-2 text-gray-400">
-                <li>IPTV Premium</li>
-                <li>Chaînes 4K/HD</li>
-                <li>VOD & Séries</li>
-                <li>Support Multi-appareils</li>
+                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">IPTV Premium</a></li>
+                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">Chaînes 4K/HD</a></li>
+                <li><a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="hover:text-white">VOD & Séries</a></li>
+                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">Support Multi-appareils</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-white font-bold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
-                <li>Centre d'aide</li>
-                <li>Contact 24/7</li>
-                <li>Installation</li>
-                <li>FAQ</li>
+                <li><a href="#contact" onClick={(e)=>handleNavClick(e,'contact')} className="hover:text-white">Centre d'aide</a></li>
+                <li><a href="#contact" onClick={(e)=>handleNavClick(e,'contact')} className="hover:text-white">Contact 24/7</a></li>
+                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">Installation</a></li>
+                <li><a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="hover:text-white">FAQ</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-white font-bold mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
-                <li>Email: support@koraiptv.com</li>
-                <li>WhatsApp: +33 X XX XX XX XX</li>
-                <li>Telegram: @KoraIPTV</li>
+                <li>
+                  <a className="hover:text-white underline" href="mailto:support@koraiptv.com?subject=Contact%20KORAIPTV&body=Bonjour%2C%20j'%C3%A9cris%20concernant%20vos%20abonnements.%20Merci%20!">Email: support@koraiptv.com</a>
+                </li>
+                <li>
+                  <a className="hover:text-white" href="#contact" onClick={(e)=>handleNavClick(e,'contact')}>WhatsApp: +33 X XX XX XX XX</a>
+                </li>
+                <li>
+                  <a className="hover:text-white" href="#contact" onClick={(e)=>handleNavClick(e,'contact')}>Telegram: @KoraIPTV</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -464,4 +428,3 @@ function App() {
 }
 
 export default App
-
