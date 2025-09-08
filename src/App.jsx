@@ -158,15 +158,14 @@ function App() {
         <div className="container mx-auto text-center">
           <div className="max-w-4xl mx-auto">
             <Badge className="mb-6 bg-purple-500/20 text-purple-300 border-purple-500/30">
-              🚀 Leader IPTV en Afrique
+              🌍 IPTV premium mondial — focus Afrique
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
               L'IPTV Premium
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{' '}pour l'Afrique</span>
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{' '}dans le monde — avec l'Afrique en avant</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Découvrez la révolution du streaming avec KORAIPTV. Plus de 25,000 chaînes en 4K/HD, 
-              serveurs anti-freeze ultra-performants et contenu africain exclusif.
+              Découvrez la révolution du streaming avec KORAIPTV. Plus de 25 000 chaînes 4K/HD accessibles partout dans le monde, serveurs anti‑freeze ultra‑performants, avec l’Afrique mise en avant.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'tarifs')}>
