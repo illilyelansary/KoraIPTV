@@ -1,6 +1,3 @@
-Voici **App.jsx** complet, prêt à copier-coller, avec **tous les liens WhatsApp sans afficher le numéro** (texte “Nous écrire sur WhatsApp” ou “Contacter sur WhatsApp”), **carrousel d’avis**, **annuel = 12 mois**, **FCFA arrondi au millier**, et **ruban “Promo -20%”** sur l’offre annuelle.
-
-```jsx
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
@@ -551,4 +548,3 @@ function App() {
 }
 
 export default App
-```
