@@ -10,6 +10,9 @@ import heroImage from './assets/RhT5Esg37oHl.png'
 import africaImage from './assets/L1MOrEHkde5p.jpg'
 import streamingImage from './assets/9zDuNPqcOsC6.png'
 
+// 👉 Import du nouveau composant
+import Chaines from './Chaines.jsx'
+
 function App() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
 
@@ -17,7 +20,7 @@ function App() {
   const buildWhatsApp = useCallback((plan) => {
     const phone = '33775740398' // +33 7 75 74 03 98
     const text = encodeURIComponent(
-      `Bonjour, je souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}). Merci de m'indiquer la marche à suivre pour finaliser l'achat.`
+      `Bonjour KORAIPTV, je souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}). Merci de m'indiquer la marche à suivre pour finaliser l'achat.`
     )
     return `https://wa.me/${phone}?text=${text}`
   }, [])
@@ -137,6 +140,8 @@ function App() {
           <nav className="hidden md:flex space-x-8">
             <a href="#accueil" onClick={(e)=>handleNavClick(e,'accueil')} className="text-white hover:text-purple-300 transition-colors">Accueil</a>
             <a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="text-white hover:text-purple-300 transition-colors">Services</a>
+            {/* 👉 Nouveau lien */}
+            <a href="#chaines" onClick={(e)=>handleNavClick(e,'chaines')} className="text-white hover:text-purple-300 transition-colors">Chaînes</a>
             <a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="text-white hover:text-purple-300 transition-colors">Tarifs</a>
             <a href="#contact" onClick={(e)=>handleNavClick(e,'contact')} className="text-white hover:text-purple-300 transition-colors">Contact</a>
           </nav>
@@ -244,6 +249,9 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* 👉 Nouvelle section Chaînes */}
+      <Chaines />
 
       {/* Anti-Freeze Technology Section */}
       <section className="py-20 px-4">
