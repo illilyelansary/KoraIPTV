@@ -1,8 +1,14 @@
+Voici **App.jsx** complet, prêt à copier-coller, avec **tous les liens WhatsApp sans afficher le numéro** (texte “Nous écrire sur WhatsApp” ou “Contacter sur WhatsApp”), **carrousel d’avis**, **annuel = 12 mois**, **FCFA arrondi au millier**, et **ruban “Promo -20%”** sur l’offre annuelle.
+
+```jsx
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Check, Play, Shield, Zap, Globe, Star, Users, TrendingUp, Wifi, Monitor, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  Check, Play, Shield, Zap, Globe, Star, Users, TrendingUp, Wifi, Monitor,
+  ChevronLeft, ChevronRight
+} from 'lucide-react'
 import './App.css'
 
 // Import des images
@@ -10,7 +16,7 @@ import heroImage from './assets/RhT5Esg37oHl.png'
 import africaImage from './assets/L1MOrEHkde5p.jpg'
 import streamingImage from './assets/9zDuNPqcOsC6.png'
 
-// (Optionnel) : si tu as le composant des chaînes
+// Composant Chaînes
 import Chaines from './Chaines.jsx'
 
 function App() {
@@ -23,7 +29,7 @@ function App() {
     return rounded.toLocaleString('fr-FR')
   }
 
-  // Lien WhatsApp avec message prérempli (achat plan)
+  // Lien WhatsApp avec message prérempli (achat plan) — n'affiche jamais le numéro à l'écran
   const buildWhatsApp = useCallback((plan) => {
     const phone = '33775740398' // +33 7 75 74 03 98
     const text = encodeURIComponent(
@@ -133,7 +139,7 @@ function App() {
     }
   ]
 
-  // Témoignages (avec quelques petites fautes volontaires + dates incluant 2022)
+  // Témoignages (quelques fautes volontairement humaines + dates incluant 2022)
   const testimonials = [
     { name: 'Awa Traoré', date: '2022', comment: 'Service fiable, aucune couppure, je recomande vivement !' },
     { name: 'Jean Kouadio', date: '2022', comment: 'Super qualité d’image et chaines variées, merci KORAIPTV.' },
@@ -152,7 +158,6 @@ function App() {
   /* === Carrousel avis (horizontal, auto-défilement) === */
   const trackRef = useRef(null)
   const [slide, setSlide] = useState(0)
-  const visible = 3 // nombre de cartes visibles en desktop (scroll-snap gère mobile)
   const ITEMS = useMemo(() => [...testimonials, ...testimonials], [testimonials]) // boucle douce
 
   useEffect(() => {
@@ -200,7 +205,10 @@ function App() {
             <a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="text-white hover:text-purple-300 transition-colors">Tarifs</a>
             <a href="#contact" onClick={(e)=>handleNavClick(e,'contact')} className="text-white hover:text-purple-300 transition-colors">Contact</a>
           </nav>
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600" onClick={(e)=>handleNavClick(e,'tarifs')}>
+          <Button
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+            onClick={(e)=>handleNavClick(e,'tarifs')}
+          >
             S'abonner
           </Button>
         </div>
@@ -305,8 +313,8 @@ function App() {
         </div>
       </section>
 
-      {/* Chaînes Section (si présente) */}
-      {typeof Chaines === 'function' && <Chaines />}
+      {/* Chaînes Section */}
+      <Chaines />
 
       {/* Anti-Freeze Technology Section */}
       <section className="py-20 px-4">
@@ -390,19 +398,23 @@ function App() {
                       </li>
                     ))}
                   </ul>
-                  <Button
-                    className={`w-full ${
-                      plan.popular
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
-                        : 'bg-white/10 hover:bg-white/20 text-white'
-                    }`}
-                    onClick={() => {
-                      setSelectedPlan(plan.id)
-                      window.location.href = buildWhatsApp(plan)
-                    }}
+                  <a
+                    className="block"
+                    href={buildWhatsApp(plan)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setSelectedPlan(plan.id)}
                   >
-                    Choisir ce plan (WhatsApp)
-                  </Button>
+                    <Button
+                      className={`w-full ${
+                        plan.popular
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                          : 'bg-white/10 hover:bg-white/20 text-white'
+                      }`}
+                    >
+                      Contacter sur WhatsApp
+                    </Button>
+                  </a>
                 </CardContent>
               </Card>
             ))}
@@ -495,7 +507,7 @@ function App() {
       {/* Footer */}
       <footer id="contact" className="bg-black/40 py-16 px-4">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
@@ -503,19 +515,9 @@ function App() {
                 </div>
                 <span className="text-2xl font-bold text-white">KORAIPTV</span>
               </div>
-              <p className="text-gray-400 mb-4">
-                Le service IPTV premium de référence. Streaming de qualité, serveurs anti-freeze et support 24/7.
-              </p>
+              <p className="text-gray-400 mb-4">Le service IPTV premium de référence en Afrique et dans le monde.</p>
             </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">Services</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">IPTV Premium</a></li>
-                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">Chaînes 4K/HD</a></li>
-                <li><a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="hover:text-white">VOD & Séries</a></li>
-                <li><a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="hover:text-white">Support Multi-appareils</a></li>
-              </ul>
-            </div>
+
             <div>
               <h3 className="text-white font-bold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
@@ -524,34 +526,16 @@ function App() {
                     Centre d'aide (Telegram)
                   </a>
                 </li>
-                <li>
-                  <a className="hover:text-white underline" href="https://t.me/KoraIPTV" target="_blank" rel="noopener noreferrer">
-                    Contact 24/7 (Telegram)
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white underline" href="https://t.me/KoraIPTV" target="_blank" rel="noopener noreferrer">
-                    Assistance installation (Telegram)
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white underline" href="https://t.me/KoraIPTV" target="_blank" rel="noopener noreferrer">
-                    FAQ (Telegram)
-                  </a>
-                </li>
               </ul>
             </div>
+
             <div>
               <h3 className="text-white font-bold mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
+                  {/* Lien WhatsApp sans afficher le numéro */}
                   <a className="hover:text-white underline" href="https://wa.me/33775740398" target="_blank" rel="noopener noreferrer">
-                    WhatsApp : +33 7 75 74 03 98
-                  </a>
-                </li>
-                <li>
-                  <a className="hover:text-white underline" href="https://t.me/KoraIPTV" target="_blank" rel="noopener noreferrer">
-                    Telegram : @KoraIPTV
+                    Nous écrire sur WhatsApp
                   </a>
                 </li>
               </ul>
@@ -567,3 +551,4 @@ function App() {
 }
 
 export default App
+```
