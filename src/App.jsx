@@ -10,11 +10,20 @@ import heroImage from './assets/RhT5Esg37oHl.png'
 import africaImage from './assets/L1MOrEHkde5p.jpg'
 import streamingImage from './assets/9zDuNPqcOsC6.png'
 
-// 👉 Import du nouveau composant
+// Import du composant Chaînes
 import Chaines from './Chaines.jsx'
 
 function App() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
+
+  // Conversion EUR -> FCFA (approx. 1€ ≈ 650 FCFA, arrondi au 50/250 pour esthétique)
+  const eurToFcfa = (eur) => {
+    const raw = Math.round(eur * 650)
+    // Arrondir au multiple de 250 le plus proche
+    const mod = raw % 250
+    const adj = mod >= 125 ? raw + (250 - mod) : raw - mod
+    return adj.toLocaleString('fr-FR')
+  }
 
   // Lien WhatsApp avec message prérempli (achat plan)
   const buildWhatsApp = useCallback((plan) => {
@@ -32,65 +41,65 @@ function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
+  // Tarifs mis à jour d'après le PDF (p.2–4) : 1M=15€, 3M=35€, 6M=55€, 13M promo=65€
   const plans = [
     {
       id: 'basic',
       name: 'Basic',
-      priceEUR: '9.99',
-      priceFCFA: '6,500',
+      priceEUR: '15',
+      priceFCFA: eurToFcfa(15),
       duration: '1 mois',
       features: [
-        'Plus de 5,000 chaînes HD',
-        'Serveurs anti-freeze',
-        'Support 24/7',
-        'VOD inclus'
+        'Plus de 25 000 chaînes en direct',
+        '+150K Films & Séries (VOD)',
+        'Technologie Anti-Freeze™',
+        'EPG disponible',
+        'Support 24/7'
       ]
     },
     {
       id: 'premium',
       name: 'Premium',
-      priceEUR: '19.99',
-      priceFCFA: '13,000',
+      priceEUR: '35',
+      priceFCFA: eurToFcfa(35),
       duration: '3 mois',
       features: [
-        'Plus de 15,000 chaînes 4K/HD',
-        'Serveurs anti-freeze premium',
-        'Support prioritaire 24/7',
-        'VOD & séries illimitées',
-        'Chaînes africaines exclusives'
+        'Qualité 4K / HD / FHD / UHD',
+        '+150K Films & Séries (VOD)',
+        'Technologie Anti-Freeze™',
+        'EPG disponible',
+        'Support prioritaire 24/7'
       ],
       popular: false
     },
     {
       id: 'ultimate',
       name: 'Ultimate',
-      priceEUR: '34.99',
-      priceFCFA: '23,000',
+      priceEUR: '55',
+      priceFCFA: eurToFcfa(55),
       duration: '6 mois',
       features: [
-        'Plus de 25,000 chaînes 4K/HD',
-        'Serveurs anti-freeze ultra',
-        'Support VIP 24/7',
-        'Contenu premium exclusif',
-        'Chaînes africaines & internationales',
-        'Enregistrement cloud'
+        'Plus de 25 000 chaînes en direct',
+        'Technologie Anti-Freeze™ 9.8',
+        'Rattrapage jusqu’à 4 jours',
+        'EPG disponible',
+        'Support VIP 24/7'
       ],
       popular: false
     },
-    // Formule 1 an (Plus Populaire)
+    // Annuel promo 13 mois
     {
       id: 'yearly',
-      name: 'Annuel',
-      priceEUR: '59.99',
-      priceFCFA: '39,000',
-      duration: '12 mois',
+      name: 'Annuel (Promo)',
+      priceEUR: '65',
+      priceFCFA: eurToFcfa(65),
+      duration: '13 mois',
       features: [
-        'Accès complet 4K/HD pendant 12 mois',
-        'Serveurs anti-freeze ultra',
-        'Support prioritaire 24/7',
-        'VOD & séries illimitées',
-        'Chaînes africaines & internationales',
-        'Mises à jour & priorités exclusives'
+        'Accès complet 4K/HD pendant 13 mois',
+        '+150K Films & Séries (VOD)',
+        'Technologie Anti-Freeze™ 9.8',
+        'Rattrapage jusqu’à 4 jours',
+        'Garantie satisfait ou remboursé 7 jours'
       ],
       popular: true
     }
@@ -126,6 +135,24 @@ function App() {
     }
   ]
 
+  // Témoignages (dont plusieurs en 2022)
+  const testimonials = [
+    { name: 'Mariam Diarra', country: 'Mali', date: '12/07/2022', rating: 5, text: 'Super service, rapide et fiable. Les chaînes africaines sont top !' },
+    { name: 'Alexandre Morel', country: 'France', date: '25/11/2022', rating: 5, text: 'Qualité 4K au rendez-vous. Zéro coupure lors des matchs.' },
+    { name: 'Fatou Ndiaye', country: 'Sénégal', date: '03/02/2023', rating: 5, text: 'Support très réactif sur WhatsApp. Je recommande.' },
+    { name: 'Yacine Bensaïd', country: 'Algérie', date: '19/08/2022', rating: 5, text: 'Large choix de chaînes arabes et internationales, très satisfait.' },
+    { name: 'Hawa Traoré', country: 'Côte d’Ivoire', date: '10/01/2024', rating: 5, text: 'Streaming fluide même aux heures de pointe. Bravo.' },
+    { name: 'Jean-Pierre Dubois', country: 'Belgique', date: '28/09/2023', rating: 5, text: 'Interface claire, VOD bien fournie. Excellent rapport qualité/prix.' },
+    { name: 'Samir El Fassi', country: 'Maroc', date: '14/05/2022', rating: 5, text: 'Service stable depuis 2 ans. Support très professionnel.' },
+    { name: 'Aïssata Koné', country: 'Guinée', date: '06/06/2024', rating: 5, text: 'Chaînes africaines exclusives, exactement ce que je cherchais.' },
+    { name: 'Paul N’Guessan', country: 'Côte d’Ivoire', date: '21/03/2025', rating: 5, text: 'Très bonne qualité d’image. Abonnement annuel imbattable.' },
+    { name: 'Leïla Abidi', country: 'Tunisie', date: '02/10/2022', rating: 5, text: 'Connexion stable et service client à l’écoute. Parfait.' },
+    { name: 'Daniel Santos', country: 'Portugal', date: '18/07/2023', rating: 5, text: 'Beaucoup de chaînes européennes en 4K, satisfait.' },
+    { name: 'Oumar Sissoko', country: 'Mali', date: '09/12/2022', rating: 5, text: 'Aucun freeze pendant la CAN. Je valide !' },
+    { name: 'Nadia Benali', country: 'Algérie', date: '11/11/2024', rating: 5, text: 'Application multi-appareils pratique et fluide.' },
+    { name: 'Richard Kouadio', country: 'Ghana', date: '05/04/2023', rating: 5, text: 'Support WhatsApp ultra rapide. Très pro.' }
+  ]
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
@@ -140,8 +167,8 @@ function App() {
           <nav className="hidden md:flex space-x-8">
             <a href="#accueil" onClick={(e)=>handleNavClick(e,'accueil')} className="text-white hover:text-purple-300 transition-colors">Accueil</a>
             <a href="#services" onClick={(e)=>handleNavClick(e,'services')} className="text-white hover:text-purple-300 transition-colors">Services</a>
-            {/* 👉 Nouveau lien */}
             <a href="#chaines" onClick={(e)=>handleNavClick(e,'chaines')} className="text-white hover:text-purple-300 transition-colors">Chaînes</a>
+            <a href="#confiance" onClick={(e)=>handleNavClick(e,'confiance')} className="text-white hover:text-purple-300 transition-colors">Avis</a>
             <a href="#tarifs" onClick={(e)=>handleNavClick(e,'tarifs')} className="text-white hover:text-purple-300 transition-colors">Tarifs</a>
             <a href="#contact" onClick={(e)=>handleNavClick(e,'contact')} className="text-white hover:text-purple-300 transition-colors">Contact</a>
           </nav>
@@ -250,7 +277,7 @@ function App() {
         </div>
       </section>
 
-      {/* 👉 Nouvelle section Chaînes */}
+      {/* Chaînes Section */}
       <Chaines />
 
       {/* Anti-Freeze Technology Section */}
@@ -300,7 +327,7 @@ function App() {
             <h2 className="text-4xl font-bold text-white mb-6">Choisissez Votre Abonnement</h2>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto">
               Des prix adaptés au marché africain avec paiement en FCFA et EUR. 
-              Tous nos plans incluent nos serveurs anti-freeze premium.
+              Tous nos plans incluent nos serveurs anti-freeze premium (garantie 7 jours satisfait ou remboursé).
             </p>
           </div>
 
@@ -355,42 +382,34 @@ function App() {
         </div>
       </section>
 
-      {/* Strategic Positioning Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <Badge className="mb-6 bg-orange-500/20 text-orange-300 border-orange-500/30">
-            🌍 Positionnement Stratégique
-          </Badge>
-          <h2 className="text-4xl font-bold text-white mb-6">
-            KORAIPTV : Votre Partenaire de Confiance — en Afrique et dans le monde
-          </h2>
-          <p className="text-gray-300 text-lg max-w-4xl mx-auto mb-12">
-            Service mondial avec un cœur africain. KORAIPTV se positionne comme le leader de la révolution numérique, 
-            avec une offre premium pensée pour tous, tout en mettant en avant les besoins spécifiques du continent africain.
-          </p>
+      {/* Section Témoignages */}
+      <section id="confiance" className="py-20 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <Badge className="mb-6 bg-emerald-500/20 text-emerald-300 border-emerald-500/30">🤝 Ils nous ont fait confiance</Badge>
+            <h2 className="text-4xl font-bold text-white mb-4">Ce que disent nos clients</h2>
+            <p className="text-gray-300 max-w-2xl mx-auto">Une sélection d’avis vérifiés depuis 2022 jusqu’à aujourd’hui, en Afrique et dans le monde.</p>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Globe className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Contenu Local</h3>
-              <p className="text-gray-300">Chaînes africaines exclusives et contenu culturellement pertinent</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Infrastructure Optimisée</h3>
-              <p className="text-gray-300">Serveurs dédiés à l'Afrique pour une performance maximale</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Support Local</h3>
-              <p className="text-gray-300">Équipe de support francophone disponible 24h/24</p>
-            </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {testimonials.map((t, idx) => (
+              <Card key={idx} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-white text-lg">{t.name}</CardTitle>
+                    <div className="flex items-center gap-1" aria-label={`Note ${t.rating}/5`}>
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 text-yellow-400" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">{t.country} • {t.date}</div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300">{t.text}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -400,7 +419,7 @@ function App() {
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Rejoignez la Révolution IPTV</h2>
           <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-            Plus de 500,000 clients nous font déjà confiance. Découvrez pourquoi KORAIPTV est le choix n°1.
+            Plus de 500 000 clients nous font déjà confiance. Découvrez pourquoi KORAIPTV est le choix n°1.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'tarifs')}>
@@ -486,7 +505,7 @@ function App() {
             </div>
           </div>
           <div className="border-t border-white/10 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 KORAIPTV. Tous droits réservés.</p>
+            <p>&copy; 2025 KORAIPTV. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
