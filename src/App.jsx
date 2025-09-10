@@ -16,6 +16,11 @@ import streamingImage from './assets/9zDuNPqcOsC6.png'
 // Composant Chaînes
 import Chaines from './Chaines.jsx'
 
+// 👉 Petit composant utilitaire pour CardFooter (shadcn propose CardFooter, mais s'il n'est pas dispo)
+const CardFooter = ({ className = '', children }) => (
+  <div className={`px-6 pb-6 ${className}`}>{children}</div>
+)
+
 function App() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
 
@@ -40,8 +45,7 @@ function App() {
     const text = encodeURIComponent(
       `Bonjour KORAIPTV, je souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}). Merci de m'indiquer la marche à suivre pour finaliser l'achat.`
     )
-    // La plupart des apps Telegram ignorent parfois ?text=, mais on le passe quand même.
-    // Option alternative si besoin : https://t.me/share/url?url=&text=${text}
+    // Certaines apps ignorent ?text=, on le met quand même.
     return `https://t.me/${username}?text=${text}`
   }, [])
 
@@ -378,7 +382,7 @@ function App() {
             {plans.map((plan) => (
               <Card
                 key={plan.id}
-                className={`relative bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 ${
+                className={`relative bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300 flex flex-col h-full ${
                   plan.popular ? 'ring-2 ring-purple-500 scale-105' : ''
                 }`}
               >
@@ -387,6 +391,7 @@ function App() {
                     {plan.ribbon || 'Plus Populaire'}
                   </Badge>
                 )}
+
                 <CardHeader className="text-center">
                   <CardTitle className="text-white text-2xl">{plan.name}</CardTitle>
                   <div className="mt-4">
@@ -396,8 +401,10 @@ function App() {
                     <div className="text-gray-400">{plan.duration}</div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
+
+                {/* Contenu des features prend toute la hauteur restante */}
+                <CardContent className="flex-1">
+                  <ul className="space-y-3">
                     {plan.features.map((feature, index) => (
                       <li key={index} className="flex items-center space-x-3">
                         <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
@@ -405,8 +412,10 @@ function App() {
                       </li>
                     ))}
                   </ul>
+                </CardContent>
 
-                  {/* Boutons de paiement : WhatsApp + Telegram */}
+                {/* Boutons de paiement : WhatsApp + Telegram */}
+                <CardFooter>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <a
                       className="block"
@@ -433,15 +442,12 @@ function App() {
                       rel="noopener noreferrer"
                       onClick={() => setSelectedPlan(plan.id)}
                     >
-                      <Button
-                        variant="outline"
-                        className="w-full border-white/20 text-white hover:bg-white/10"
-                      >
+                      <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
                         Commander via Telegram
                       </Button>
                     </a>
                   </div>
-                </CardContent>
+                </CardFooter>
               </Card>
             ))}
           </div>
