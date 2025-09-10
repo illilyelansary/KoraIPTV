@@ -26,13 +26,23 @@ function App() {
     return rounded.toLocaleString('fr-FR')
   }
 
-  // Lien WhatsApp avec message prérempli (achat plan) — n'affiche jamais le numéro à l'écran
+  // Messages préremplis — n'affichent jamais le numéro à l'écran
   const buildWhatsApp = useCallback((plan) => {
-    const phone = '33775740398' // +33 7 75 74 03 98
+    const phone = '33775740398' // +33 7 75 74 03 98 (non affiché)
     const text = encodeURIComponent(
       `Bonjour KORAIPTV, je souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}). Merci de m'indiquer la marche à suivre pour finaliser l'achat.`
     )
     return `https://wa.me/${phone}?text=${text}`
+  }, [])
+
+  const buildTelegram = useCallback((plan) => {
+    const username = 'KoraIPTV'
+    const text = encodeURIComponent(
+      `Bonjour KORAIPTV, je souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}). Merci de m'indiquer la marche à suivre pour finaliser l'achat.`
+    )
+    // La plupart des apps Telegram ignorent parfois ?text=, mais on le passe quand même.
+    // Option alternative si besoin : https://t.me/share/url?url=&text=${text}
+    return `https://t.me/${username}?text=${text}`
   }, [])
 
   // Défilement fluide vers une section
@@ -395,23 +405,42 @@ function App() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    className="block"
-                    href={buildWhatsApp(plan)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setSelectedPlan(plan.id)}
-                  >
-                    <Button
-                      className={`w-full ${
-                        plan.popular
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
-                          : 'bg-white/10 hover:bg-white/20 text-white'
-                      }`}
+
+                  {/* Boutons de paiement : WhatsApp + Telegram */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a
+                      className="block"
+                      href={buildWhatsApp(plan)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setSelectedPlan(plan.id)}
                     >
-                      Contacter sur WhatsApp
-                    </Button>
-                  </a>
+                      <Button
+                        className={`w-full ${
+                          plan.popular
+                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                            : 'bg-white/10 hover:bg-white/20 text-white'
+                        }`}
+                      >
+                        Commander via WhatsApp
+                      </Button>
+                    </a>
+
+                    <a
+                      className="block"
+                      href={buildTelegram(plan)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setSelectedPlan(plan.id)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-white/20 text-white hover:bg-white/10"
+                      >
+                        Commander via Telegram
+                      </Button>
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
             ))}
