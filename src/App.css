@@ -118,3 +118,52 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ============ UTILITAIRES AJOUTÉS ============ */
+@layer utilities {
+  /* Masquer proprement les scrollbars (horizontal/vertical) */
+  .no-scrollbar {
+    -ms-overflow-style: none;   /* IE/Edge */
+    scrollbar-width: none;      /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;              /* Chrome/Safari/Opera */
+  }
+
+  /* Reset bouton/lien propre (et accessible) */
+  .btn-reset {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-decoration: none;
+    user-select: none;
+  }
+  .btn-block { width: 100%; display: inline-flex; }
+  .btn-ellipsis { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+  .btn-reset:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  /* Grille stable pour les 2 boutons en bas des cartes */
+  .card-actions-grid {
+    display: grid;
+    gap: 0.75rem;               /* 12px */
+    grid-template-columns: 1fr; /* mobile: 1 colonne */
+  }
+  @media (min-width: 640px) {   /* sm: */
+    .card-actions-grid { grid-template-columns: 1fr 1fr; } /* desktop: 2 colonnes */
+  }
+
+  /* Footer de carte sans marges parasites (si besoin) */
+  .card-footer-clean {
+    margin: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
