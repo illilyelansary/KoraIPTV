@@ -35,13 +35,12 @@ function App() {
     return `https://wa.me/${phone}?text=${text}`
   }, [])
 
-  // Lien Telegram avec le même message prérempli
-  // (ouvre la boîte de partage Telegram avec le texte prêt à envoyer)
+  // Lien Telegram avec le même message prérempli (achat plan)
   const buildTelegram = useCallback((plan) => {
     const text = encodeURIComponent(
       `Bonjour KORAIPTV, je souhaite acheter la formule ${plan.name} au prix de ${plan.priceEUR}€ / ${plan.priceFCFA} FCFA (${plan.duration}). Merci de m'indiquer la marche à suivre pour finaliser l'achat.`
     )
-    // url param peut rester vide, on partage surtout un texte
+    // Partage surtout d’un texte ; url peut rester vide
     return `https://t.me/share/url?url=${encodeURIComponent('')}&text=${text}`
   }, [])
 
@@ -52,7 +51,7 @@ function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
-  // Tarifs (1M=15€, 3M=35€, 6M=55€, Annuel 12M=65€)
+  // Tarifs (1M=15€, 3M=35€, 6M=55€, Annuel 12M=80€)
   const plans = [
     {
       id: 'basic',
@@ -101,8 +100,8 @@ function App() {
     {
       id: 'yearly',
       name: 'Annuel',
-      priceEUR: '65',
-      priceFCFA: eurToFcfa(65),
+      priceEUR: '80',
+      priceFCFA: eurToFcfa(80),
       duration: '12 mois',
       features: [
         'Accès complet 4K/HD pendant 12 mois',
@@ -192,6 +191,10 @@ function App() {
     const delta = dir === 'prev' ? -cardWidth : cardWidth
     container.scrollBy({ left: delta, behavior: 'smooth' })
   }
+
+  // CTA: liens simples (WhatsApp/Telegram) pour parler à un expert
+  const CTA_WHATSAPP = "https://wa.me/33775740398?text=Bonjour%2C%20je%20souhaite%20parler%20avec%20un%20expert%20KORAIPTV."
+  const CTA_TELEGRAM = "https://t.me/share/url?url=&text=Bonjour%20KORAIPTV%2C%20je%20souhaite%20parler%20avec%20un%20expert."
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -519,14 +522,18 @@ function App() {
             <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-4" onClick={(e)=>handleNavClick(e,'tarifs')}>
               Commencer l'essai gratuit
             </Button>
-            <a
-              className="inline-flex"
-              href="https://wa.me/33775740398?text=Bonjour%2C%20je%20souhaite%20parler%20avec%20un%20expert%20KORAIPTV."
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+
+            {/* WhatsApp CTA (sans afficher le numéro) */}
+            <a className="inline-flex" href={CTA_WHATSAPP} target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4">
                 Contacter sur WhatsApp
+              </Button>
+            </a>
+
+            {/* Telegram CTA */}
+            <a className="inline-flex" href={CTA_TELEGRAM} target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4">
+                Contacter sur Telegram
               </Button>
             </a>
           </div>
@@ -565,6 +572,12 @@ function App() {
                   {/* Lien WhatsApp sans afficher le numéro */}
                   <a className="hover:text-white underline" href="https://wa.me/33775740398" target="_blank" rel="noopener noreferrer">
                     Nous écrire sur WhatsApp
+                  </a>
+                </li>
+                <li>
+                  {/* Lien Telegram discret */}
+                  <a className="hover:text-white underline" href="https://t.me/KoraIPTV" target="_blank" rel="noopener noreferrer">
+                    Nous écrire sur Telegram
                   </a>
                 </li>
               </ul>
