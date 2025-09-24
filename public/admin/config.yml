@@ -1,17 +1,17 @@
 backend:
   name: github
-  repo: illilyelansary/KoralIPTV   # ton repo GitHub
-  branch: main                     # la branche principale
+  repo: illilyelansary/KoralIPTV
+  branch: main
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
-media_folder: "public/images/uploads"   # où seront stockées les images dans le repo
-public_folder: "/images/uploads"        # chemin public des images
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
 
 collections:
   - name: "pages"
     label: "Pages"
-    folder: "src/content/pages"   # tu devras créer ce dossier dans ton projet
+    folder: "src/content/pages"
     create: true
     slug: "{{slug}}"
     fields:
@@ -20,7 +20,7 @@ collections:
 
   - name: "posts"
     label: "Articles"
-    folder: "src/content/posts"   # tu devras créer ce dossier aussi
+    folder: "src/content/posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
