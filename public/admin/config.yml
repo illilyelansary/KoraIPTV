@@ -1,12 +1,13 @@
 backend:
   name: github
-  repo: illilyelansary/KoralIPTV
+  repo: illilyelansary/KoraIPTV   # ton repo GitHub
   branch: main
+  # OAuth via Netlify (Access control > OAuth > GitHub)
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
-media_folder: "public/images/uploads"
-public_folder: "/images/uploads"
+media_folder: "public/images/uploads"   # où les images sont commit dans le repo
+public_folder: "/images/uploads"        # chemin public pour l'affichage
 
 collections:
   - name: "pages"
@@ -15,8 +16,8 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Titre", name: "title", widget: "string"}
-      - {label: "Contenu", name: "body", widget: "markdown"}
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Contenu", name: "body", widget: "markdown" }
 
   - name: "posts"
     label: "Articles"
@@ -24,6 +25,6 @@ collections:
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - {label: "Titre", name: "title", widget: "string"}
-      - {label: "Date", name: "date", widget: "datetime"}
-      - {label: "Contenu", name: "body", widget: "markdown"}
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Contenu", name: "body", widget: "markdown" }
