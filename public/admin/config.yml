@@ -1,13 +1,12 @@
 backend:
   name: github
-  repo: illilyelansary/KoraIPTV   # ton repo GitHub
+  repo: illilyelansary/KoraIPTV   # <-- corrigé
   branch: main
-  # OAuth via Netlify (Access control > OAuth > GitHub)
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
-media_folder: "public/images/uploads"   # où les images sont commit dans le repo
-public_folder: "/images/uploads"        # chemin public pour l'affichage
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
 
 collections:
   - name: "pages"
