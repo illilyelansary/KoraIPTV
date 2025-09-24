@@ -1,7 +1,9 @@
 backend:
   name: github
-  repo: illilyelansary/KoralPTV # Ton repo GitHub
-  branch: main # ou master si ton projet est sur master
+  repo: illilyelansary/KoralPTV  # ton repo GitHub
+  branch: main                   # la branche de production
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
